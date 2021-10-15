@@ -47,7 +47,7 @@ class _LoginForm extends StatelessWidget {
     (
       child: Form
       (
-        // TO DO: mantener la referencia al KEY
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column
         (
           children: 
@@ -57,7 +57,15 @@ class _LoginForm extends StatelessWidget {
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(hintText: "fadriacarrasco@gmail.com", labelText: "Correo electrónico",
-                                                              prefixIcon: Icons.alternate_email_rounded)
+                prefixIcon: Icons.alternate_email_rounded),
+              validator: (value)
+              {
+                String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                RegExp regExp  = new RegExp(pattern);
+
+                return regExp.hasMatch(value ?? "") ? null
+                : "Por favor, introduce un correo correcto";
+              },
             ),
 
             SizedBox(height: 30),
@@ -68,7 +76,12 @@ class _LoginForm extends StatelessWidget {
               obscureText: true, // Ocultamos el texto introducido
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(hintText: "****", labelText: "Contraseña",
-                                                              prefixIcon: Icons.lock_outline)
+                prefixIcon: Icons.lock_outline),
+              validator: (value)
+              {
+                return (value != null && value.length >= 8 ) ? null
+                : "La contraseña debe tener al menos 8 caracteres";
+              },
             ),
 
             SizedBox(height: 30),
